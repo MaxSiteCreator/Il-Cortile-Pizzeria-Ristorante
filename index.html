@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#16110e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200..900;1,9..144,200..900&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,200..800;1,300..500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --char:#16110e; --char-2:#1f1814; --char-3:#2b211b;
@@ -29,11 +29,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 ::selection{background:var(--terra);color:var(--cream)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
-/* grana */
-body::after{content:"";position:fixed;inset:-50%;z-index:300;pointer-events:none;opacity:.065;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:grain 1.2s steps(6) infinite}
-@keyframes grain{0%,100%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}}
+/* grana (statica: nessuna animazione continua) */
+body::after{content:"";position:fixed;inset:0;z-index:300;pointer-events:none;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@media (max-width:980px){body::after{display:none}}
 
 /* ===== loader: il forno sale di temperatura ===== */
 .loader{position:fixed;inset:0;z-index:400;background:var(--char);display:grid;place-items:center;transition:clip-path 1.2s var(--ease-out)}
@@ -297,8 +296,9 @@ section{position:relative}
 .dish p{grid-column:1/-1;color:var(--ink-soft);font-size:.92rem;margin-top:6px}
 .dish .tagc{display:inline-block;font-family:var(--sans);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--basil-2);color:var(--basil-2);border-radius:100px;padding:2px 8px;margin-left:10px;vertical-align:middle}
 .menu-foot{margin-top:46px;color:var(--ink-soft);font-size:.86rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
-.dish-preview{position:fixed;top:0;left:0;width:230px;height:230px;margin:-115px 0 0 -115px;z-index:120;pointer-events:none;border-radius:50%;transform:scale(0);transition:transform .5s var(--ease-out)}
-.dish-preview.show{transform:scale(1)}
+.dish-preview{position:fixed;top:0;left:0;width:230px;height:230px;margin:-115px 0 0 -115px;z-index:120;pointer-events:none;will-change:transform}
+.dish-preview .pv{width:100%;height:100%;transform:scale(0);transition:transform .5s var(--ease-out)}
+.dish-preview.show .pv{transform:scale(1)}
 .dish-preview svg{width:100%;height:100%;filter:drop-shadow(0 30px 40px rgba(0,0,0,.6));animation:spin 14s linear infinite}
 @media (hover:none){.dish-preview{display:none}}
 
@@ -346,7 +346,9 @@ section{position:relative}
 .visit .btn-fill:hover{color:var(--cream)}
 .map{position:relative;border-radius:999px 999px 24px 24px;overflow:hidden;min-height:520px;box-shadow:0 40px 80px -40px rgba(22,17,14,.5);
   background:var(--cream-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cg fill='none' stroke='%23c9b796' stroke-width='14'%3E%3Cpath d='M-20 180L620 120M-20 420L620 470M150 -20L210 620M420 -20L380 620M0 600L600 0'/%3E%3C/g%3E%3Cg fill='none' stroke='%23d8c8aa' stroke-width='6'%3E%3Cpath d='M-20 300L620 290M290 -20L300 620M-20 60L620 40M520 -20L540 620'/%3E%3C/g%3E%3C/svg%3E") center/cover}
-.map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(.9) sepia(.35) contrast(1.05)}
+.map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(.9) sepia(.35) contrast(1.05);z-index:3}
+.map-load{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:2;padding:12px 20px;border-radius:100px;background:var(--char);color:var(--cream);font-size:.82rem;font-weight:600;white-space:nowrap;transition:background .3s}
+.map-load:hover{background:var(--terra)}
 .map-pin{position:absolute;left:50%;top:50%;z-index:2;transform:translate(-50%,-100%);pointer-events:none}
 .map-pin svg{width:44px;height:56px;filter:drop-shadow(0 8px 10px rgba(0,0,0,.3));animation:bob 2.4s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-8px)}}
@@ -384,6 +386,53 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
   .sig-label{display:none}
   .map{min-height:420px}
 }
+/* ---- mobile: più leggero e più comodo ---- */
+@media (max-width:980px){
+  html{-webkit-tap-highlight-color:transparent}
+  .nav.scrolled,.sound,.badge{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .nav.scrolled{background:rgba(22,17,14,.94)}
+  .sound{background:rgba(31,24,20,.94)}
+  .hero{height:210vh}
+  .hero-copy{top:max(92px,11vh)}
+  .hero h1{font-size:clamp(2.7rem,13vw,4.4rem)}
+  .hero-ctas{margin-top:22px}
+  .hero-ctas .btn{padding:13px 20px}
+  .hero-ctas .btn-ghost,.baked-msg{display:none}
+  .steps{bottom:max(18px,3vh);right:76px}
+  .step b{font-size:.95rem;margin-bottom:4px}
+  .step{font-size:.62rem;letter-spacing:.1em}
+  .sound{left:auto;right:16px;bottom:16px;padding:11px}
+  .sound span.t{display:none}
+  .journey{height:300vh}
+  .jword{font-size:clamp(3.6rem,19vw,6rem)}
+  .jtext p{font-size:.95rem}
+  .journey-head .h2{font-size:clamp(2rem,9vw,2.8rem)}
+  .thermo{gap:10px}
+  .thermo-num{font-size:2.2rem;min-width:0}
+  .thermo-bar{height:56px}
+  .sec{padding:84px 0}
+  .sec-head{margin-bottom:40px}
+  .reveal{transform:translateY(24px)}
+  .dough-card{min-height:0}
+  .dough-card canvas{width:200px;height:200px;right:-50px;top:-50px}
+  .dough-tab{padding:18px 0}
+  /* laboratorio: pizza sempre visibile mentre scegli */
+  .lab-stage{position:sticky;top:58px;z-index:5;display:flex;align-items:center;gap:16px;max-width:none;width:auto;background:var(--cream);padding:12px 0;margin:0 -16px;padding-left:16px;padding-right:16px;border-bottom:1px solid rgba(22,17,14,.1)}
+  .board{width:34vw;max-width:170px;flex:none}
+  .lab-name{text-align:left;margin:0}
+  .lab-name h3{font-size:1.5rem}
+  .lab-name p{font-size:.8rem}
+  .lab-ctrls{padding-top:24px}
+  .chip{padding:9px 14px;font-size:.84rem}
+  .lab-actions .btn{flex:1 1 auto;justify-content:center}
+  .rev{min-height:0;padding:28px}
+  .numbers{margin-bottom:50px}
+  .stat{padding-top:30px}
+  .map{min-height:360px}
+  .foot-giant{margin:60px 0 24px}
+  footer.site{padding:80px 0 90px}
+}
+@media (max-width:980px) and (max-height:700px){.lead{display:none}}
 @media (max-width:560px){
   .menu-filters button{padding:10px 14px;font-size:.78rem}
   .info-row{grid-template-columns:1fr;gap:6px}
@@ -407,7 +456,6 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
     <radialGradient id="gCrust" cx="50%" cy="50%" r="50%"><stop offset="80%" stop-color="#e6b06a"/><stop offset="91%" stop-color="#c98a43"/><stop offset="100%" stop-color="#7a4520"/></radialGradient>
     <radialGradient id="gSauce" cx="45%" cy="40%" r="60%"><stop offset="0%" stop-color="#e2502b"/><stop offset="100%" stop-color="#a8331a"/></radialGradient>
     <radialGradient id="gBianca" cx="45%" cy="40%" r="60%"><stop offset="0%" stop-color="#fbf1dc"/><stop offset="100%" stop-color="#ecd6aa"/></radialGradient>
-    <filter id="fRough"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="9"/></filter>
   </defs>
 </svg>
 
@@ -563,9 +611,9 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
       <div class="lab-stage reveal">
         <div class="board">
           <svg viewBox="0 0 400 400" id="labPizza" aria-label="Anteprima della tua pizza">
-            <circle cx="200" cy="200" r="190" fill="url(#gCrust)" filter="url(#fRough)"/>
+            <path id="labCrust" fill="url(#gCrust)"/>
             <g fill="#3b2213" opacity=".7"><circle cx="60" cy="140" r="5"/><circle cx="342" cy="260" r="6"/><circle cx="120" cy="352" r="4"/><circle cx="300" cy="62" r="5"/><circle cx="30" cy="230" r="3"/><circle cx="372" cy="170" r="4"/><circle cx="215" cy="378" r="4"/><circle cx="170" cy="22" r="3.5"/></g>
-            <circle id="labBase" cx="200" cy="200" r="158" fill="url(#gSauce)" filter="url(#fRough)"/>
+            <path id="labBase" fill="url(#gSauce)"/>
             <g id="labTop"></g>
           </svg>
         </div>
@@ -697,7 +745,7 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
       </div>
     </div>
     <div class="map reveal">
-      <iframe title="Mappa Il Cortile In Centro" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=Via%20Sigismondo%20Pandolfo%20Malatesta%2017%2C%20Rimini&z=17&output=embed"></iframe>
+      <button class="map-load" id="mapLoad" type="button">Mostra la mappa interattiva</button>
       <div class="map-pin"><svg viewBox="0 0 44 56"><path d="M22 54S2 32 2 20a20 20 0 0 1 40 0c0 12-20 34-20 34z" fill="#c4532d"/><path d="M14 28v-7a8 8 0 0 1 16 0v7" fill="none" stroke="#f4ead9" stroke-width="2"/></svg></div>
     </div>
   </div>
@@ -738,22 +786,28 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
 
   /* ============ LOADER: 20° → 450° ============ */
   const loader = $('#loader'), ldNum = $('#ldNum'), ldBar = $('#ldBar');
-  let loaded = false;
-  addEventListener('load', () => loaded = true);
   (function heat(t0) {
-    const dur = reduce ? 10 : 1900;
+    // breve: non aspetta il caricamento completo (font e risorse arrivano in parallelo)
+    const dur = reduce ? 10 : (innerWidth < 980 ? 900 : 1200);
     const step = now => {
       const k = clamp((now - t0) / dur);
       const e = 1 - Math.pow(1 - k, 3);
       ldNum.textContent = Math.round(20 + 430 * e);
       ldBar.style.width = e * 100 + '%';
       loader.style.setProperty('--heat', (e * .6).toFixed(3));
-      if (k < 1 || (!loaded && now - t0 < 5000)) return requestAnimationFrame(step);
+      if (k < 1) return requestAnimationFrame(step);
+      finish();
+    };
+    const finish = () => {
+      if (loader.classList.contains('done')) return;
+      ldNum.textContent = 450; ldBar.style.width = '100%';
       loader.classList.add('done');
       document.body.classList.remove('locked');
       document.body.classList.add('ready');
     };
     requestAnimationFrame(step);
+    // sicurezza: se il browser rallenta i frame (scheda in background, risparmio energetico) apri comunque
+    setTimeout(finish, dur + 400);
   })(performance.now());
 
   /* ============ CURSORE con etichette ============ */
@@ -806,10 +860,11 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
   /* ============ HERO: impasto con fisica + condimento allo scroll ============ */
   const hero = $('#hero'), cv = $('#heroCanvas'), ctx = cv.getContext('2d');
   const steps = $$('#steps .step'), bakedMsg = $('#bakedMsg'), heroGlow = $('#heroGlow');
-  const N = 80;
+  const LOW = innerWidth < 980 || (navigator.hardwareConcurrency || 8) <= 4;
+  const N = LOW ? 56 : 80;
   const pts = Array.from({ length: N }, () => ({ o: 0, v: 0 }));
   const R0 = rng(7);
-  const specks = Array.from({ length: 160 }, () => ({ a: R0() * TAU, r: Math.sqrt(R0()) * .8, s: R0() * 1.3 + .3 }));
+  const specks = Array.from({ length: LOW ? 70 : 150 },() => ({ a: R0() * TAU, r: Math.sqrt(R0()) * .8, s: R0() * 1.3 + .3 }));
   const spots = Array.from({ length: 34 }, () => ({ a: R0() * TAU, r: .89 + R0() * .08, s: R0() * 4 + 2 }));
   const mozz = Array.from({ length: 11 }, (_, i) => ({ a: i / 11 * TAU + R0() * .5, r: i ? R0() * .5 + .14 : 0, s: .1 + R0() * .06, sq: .75 + R0() * .3, rot: R0() * TAU, d: R0() }));
   const basil = Array.from({ length: 6 }, (_, i) => ({ a: i / 6 * TAU + R0(), r: .2 + R0() * .45, rot: R0() * TAU, d: i / 6 }));
@@ -818,20 +873,28 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
   let flour = [], embers = [];
   let lmx = 0, lmy = 0;
 
+  let sizedW = 0;
   function sizeHero() {
-    const d = Math.min(devicePixelRatio || 1, 2);
+    // su mobile la barra dell'indirizzo cambia solo l'altezza: non ridimensionare il canvas
+    if (LOW && cv.clientWidth === sizedW) return;
+    sizedW = cv.clientWidth;
+    const d = Math.min(devicePixelRatio || 1, LOW ? 1.5 : 2);
     W = cv.clientWidth; H = cv.clientHeight;
     cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0);
     const mobile = W < 980;
-    R = mobile ? Math.min(W * .4, H * .17) : Math.min(W * .22, H * .34);
+    R = mobile ? Math.min(W * .4, H * .155) : Math.min(W * .22, H * .34);
     CX = mobile ? W * .5 : W * .68;
-    CY = mobile ? H * .74 : H * .54;
+    CY = mobile ? H * .7 : H * .54;
     measureChars();
   }
   const sticky = $('.hero-sticky');
   sticky.addEventListener('pointerenter', () => mouseIn = true);
   sticky.addEventListener('pointerleave', () => mouseIn = false);
+  sticky.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') mouseIn = false; });
+  sticky.addEventListener('pointercancel', () => mouseIn = false);
   sticky.addEventListener('pointerdown', e => {
+    mx = e.clientX; my = e.clientY; lmx = mx; lmy = my;
+    if (e.pointerType !== 'mouse') mouseIn = true;
     const dx = e.clientX - CX, dy = e.clientY - CY;
     if (Math.hypot(dx, dy) < R * 1.4) {
       pts.forEach(p => p.v += (Math.random() - .3) * R * .14);
@@ -840,10 +903,16 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
     }
   });
   function spawnFlour(x, y, sp = 1.4) {
-    if (flour.length > 260) return;
+    if (flour.length > (LOW ? 90 : 220)) return;
     const a = Math.random() * TAU, v = Math.random() * sp;
     flour.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - .3, life: 0, max: 60 + Math.random() * 60, r: Math.random() * 1.8 + .4 });
   }
+  // sprite della brace disegnato una volta sola e riusato
+  const EMBER = document.createElement('canvas');
+  EMBER.width = EMBER.height = 32;
+  (() => { const c = EMBER.getContext('2d'), g = c.createRadialGradient(16, 16, 0, 16, 16, 16);
+    g.addColorStop(0, 'rgba(255,200,120,1)'); g.addColorStop(.35, 'rgba(255,120,50,.55)'); g.addColorStop(1, 'rgba(255,90,30,0)');
+    c.fillStyle = g; c.fillRect(0, 0, 32, 32); })();
   const spawnEmber = () => ({ x: Math.random() * W, y: H + 10, r: Math.random() * 2 + .6, vy: -(Math.random() * .9 + .4), vx: (Math.random() - .5) * .4, life: 0, max: 240 + Math.random() * 260, ph: Math.random() * TAU });
 
   function shapePath(scale) {
@@ -893,11 +962,10 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
     if (mouseIn && sp > 6 && Math.hypot(dx, dy) < R * 1.5) for (let i = 0; i < Math.min(6, sp / 6); i++) spawnFlour(mx, my);
     lmx = mx; lmy = my;
 
-    // ombra
-    ctx.save();
-    ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.filter = 'blur(28px)';
-    ctx.beginPath(); ctx.ellipse(CX, CY + R * .2, R * 1.05, R * .95, 0, 0, TAU); ctx.fill();
-    ctx.restore();
+    // ombra (gradiente: molto più leggero di un blur)
+    const sh = ctx.createRadialGradient(CX, CY + R * .2, R * .7, CX, CY + R * .2, R * 1.3);
+    sh.addColorStop(0, 'rgba(0,0,0,.55)'); sh.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = sh; ctx.fillRect(CX - R * 1.4, CY - R * 1.2, R * 2.8, R * 2.8);
 
     // impasto / cornicione
     const outer = shapePath(1);
@@ -977,16 +1045,16 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
     });
 
     // braci
-    const target = reduce ? 0 : Math.round(30 + bake * 80);
+    const target = reduce ? 0 : Math.round((LOW ? 14 : 30) + bake * (LOW ? 30 : 70));
     while (embers.length < target) { const e = spawnEmber(); e.y = Math.random() * H; embers.push(e); }
     embers.forEach(p => {
       p.life++; p.y += p.vy * (1 + bake); p.x += p.vx + Math.sin((p.life + p.ph * 50) / 40) * .35;
       const a = Math.max(0, 1 - p.life / p.max) * (.5 + .5 * Math.sin(p.life / 6 + p.ph));
-      const gg = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
-      gg.addColorStop(0, `rgba(255,190,110,${a})`); gg.addColorStop(.4, `rgba(255,120,50,${a * .5})`); gg.addColorStop(1, 'rgba(255,90,30,0)');
-      ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 4, 0, TAU); ctx.fill();
+      const s = p.r * 8;
+      ctx.globalAlpha = a; ctx.drawImage(EMBER, p.x - s / 2, p.y - s / 2, s, s);
       if (p.life > p.max || p.y < -20) Object.assign(p, spawnEmber());
     });
+    ctx.globalAlpha = 1;
     if (embers.length > target) embers.length = target;
 
     // UI di stato
@@ -1080,10 +1148,20 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
   }
   const ORDER = ['burrata', 'mozzarella', 'zola', 'mortadella', 'crudo', 'salame', 'funghi', 'pomodorini', 'olive', 'noci', 'pistacchio', 'rucola', 'basilico', 'miele'];
   const sortIng = list => [...list].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
+  // bordo irregolare calcolato una volta (al posto del costoso filtro SVG)
+  const wobble = (r, amp, seed) => {
+    const rr = rng(seed), n = 36, f = [rr() * TAU, rr() * TAU, rr() * TAU];
+    const P = i => { const a = i / n * TAU, d = r + amp * (Math.sin(a * 3 + f[0]) * .5 + Math.sin(a * 5 + f[1]) * .3 + Math.sin(a * 9 + f[2]) * .2); return [200 + Math.cos(a) * d, 200 + Math.sin(a) * d]; };
+    let s = '';
+    for (let i = 0; i <= n; i++) { const [ax, ay] = P(i), [bx, by] = P(i + 1); s += i ? `Q${ax.toFixed(1)} ${ay.toFixed(1)} ${((ax + bx) / 2).toFixed(1)} ${((ay + by) / 2).toFixed(1)}` : `M${((ax + bx) / 2).toFixed(1)} ${((ay + by) / 2).toFixed(1)}`; }
+    return s + 'Z';
+  };
+  const CRUST_D = wobble(188, 5, 11), BASE_D = wobble(156, 7, 23);
+  $('#labCrust').setAttribute('d', CRUST_D); $('#labBase').setAttribute('d', BASE_D);
   function pizzaSVG(base, list) {
-    return `<circle cx="200" cy="200" r="190" fill="url(#gCrust)" filter="url(#fRough)"/>
+    return `<path d="${CRUST_D}" fill="url(#gCrust)"/>
       <g fill="#3b2213" opacity=".7"><circle cx="60" cy="140" r="5"/><circle cx="342" cy="260" r="6"/><circle cx="120" cy="352" r="4"/><circle cx="300" cy="62" r="5"/><circle cx="372" cy="170" r="4"/><circle cx="215" cy="378" r="4"/></g>
-      <circle cx="200" cy="200" r="158" fill="url(#${base === 'bianca' ? 'gBianca' : 'gSauce'})" filter="url(#fRough)"/>
+      <path d="${BASE_D}" fill="url(#${base === 'bianca' ? 'gBianca' : 'gSauce'})"/>
       ${sortIng(list).map(k => toppingSVG(k)).join('')}`;
   }
   $('#sigPizza').innerHTML = pizzaSVG('bianca', ['mozzarella', 'crudo', 'zola', 'noci', 'miele']);
@@ -1193,11 +1271,11 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
   }
   const movePill = btn => { pill.style.left = btn.offsetLeft + 'px'; pill.style.width = btn.offsetWidth + 'px'; };
   $$('#menuFilters button').forEach(b => b.addEventListener('click', () => {
-    $$('#menuFilters button').forEach(x => x.classList.toggle('active', x === b)); movePill(b); renderMenu(b.dataset.cat);
+    $$('#menuFilters button').forEach(x => x.classList.toggle('active', x === b)); movePill(b); renderMenu(b.dataset.cat); measure();
   }));
   renderMenu('gourmet');
   const placePill = () => movePill($('#menuFilters button.active'));
-  if (document.fonts) document.fonts.ready.then(() => { placePill(); measureChars(); });
+  if (document.fonts) document.fonts.ready.then(() => { placePill(); if (M.vh) measure(); });
   setTimeout(placePill, 150);
   let px = 0, py = 0;
   if (finePointer) {
@@ -1205,7 +1283,8 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
       const d = e.target.closest('.dish'); if (!d) return;
       const item = menu[curCat][+d.dataset.i];
       if (!item[4]) { prev.classList.remove('show'); return; }
-      prev.innerHTML = `<svg viewBox="0 0 400 400">${pizzaSVG(item[4], item[5])}</svg>`;
+      prev.innerHTML = `<div class="pv"><svg viewBox="0 0 400 400">${pizzaSVG(item[4], item[5])}</svg></div>`;
+      prev.offsetWidth; // fa partire l'animazione di comparsa
       prev.classList.add('show');
     });
     list.addEventListener('pointerleave', () => prev.classList.remove('show'));
@@ -1232,7 +1311,20 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
 
   /* ============ SCROLL ============ */
   const prog = $('#progress'), giant = $('#footGiant');
-  let lastDir = 0, navY = scrollY;
+  let lastDir = 0, navY = scrollY, litN = -1, mHalf = 0;
+  // misure in cache: lo scroll non forza mai il ricalcolo del layout
+  const M = {};
+  const absTop = el => el.getBoundingClientRect().top + scrollY;
+  function measure() {
+    M.vh = innerHeight;
+    M.heroRun = Math.max(1, hero.offsetHeight - innerHeight);
+    M.btTop = absTop(bt); M.btH = bt.offsetHeight;
+    M.jTop = absTop(jSec); M.jTotal = Math.max(1, jSec.offsetHeight - innerHeight);
+    M.maxX = jTrack.scrollWidth - innerWidth;
+    M.giantTop = absTop(giant);
+    mHalf = mTrack.scrollWidth / 2;
+    measureChars();
+  }
   function onScroll() {
     const y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
     prog.style.transform = `scaleX(${h ? y / h : 0})`;
@@ -1245,19 +1337,21 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
     if (y < innerHeight) nav.classList.remove('hide');
 
     // hero
-    heroP = clamp(y / (hero.offsetHeight - innerHeight));
+    heroP = clamp(y / M.heroRun);
 
     // manifesto
-    const r = bt.getBoundingClientRect();
-    const p = clamp((innerHeight * .85 - r.top) / (r.height + innerHeight * .3));
+    const vh = M.vh;
+    const p = clamp((y + vh * .85 - M.btTop) / (M.btH + vh * .3));
     const n = Math.floor(p * words.length);
-    words.forEach((w, i) => w.classList.toggle('lit', reduce || i < n));
+    if (n !== litN) { litN = n; words.forEach((w, i) => w.classList.toggle('lit', reduce || i < n)); }
 
-    // viaggio
-    const jr = jSec.getBoundingClientRect(), total = jSec.offsetHeight - innerHeight;
-    const jp = clamp(-jr.top / total);
-    const maxX = jTrack.scrollWidth - innerWidth;
-    jTrack.style.transform = `translate3d(${-jp * maxX}px,0,0)`;
+    // footer
+    if (y + vh > M.giantTop - 200) giant.style.transform = `translateX(${((M.giantTop - y - vh) * .15).toFixed(1)}px)`;
+
+    // viaggio (solo quando è in vista)
+    if (y + vh < M.jTop - 50 || y > M.jTop + M.jTotal + vh) return;
+    const jp = clamp((y - M.jTop) / M.jTotal);
+    jTrack.style.transform = `translate3d(${(-jp * M.maxX).toFixed(1)}px,0,0)`;
     const temp = tempAt(jp);
     thermoNum.textContent = Math.round(temp);
     thermoFill.style.height = (temp / 450 * 100) + '%';
@@ -1265,10 +1359,6 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
     const active = Math.min(3, Math.floor(jp * 4 + .15));
     jPanels.forEach((pn, i) => pn.classList.toggle('on', i === active));
     jDots.forEach((d, i) => d.classList.toggle('on', i <= active));
-
-    // footer
-    const gr = giant.getBoundingClientRect();
-    giant.style.transform = `translateX(${(gr.top - innerHeight) * .15}px)`;
   }
   addEventListener('scroll', onScroll, { passive: true });
 
@@ -1331,12 +1421,16 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
 
   /* ============ LOOP PRINCIPALE ============ */
   function frame(t) {
-    // cursore
-    cx += (mx - cx) * .16; cy += (my - cy) * .16;
-    cur.style.transform = `translate(${cx}px,${cy}px)`;
-    // anteprima menù
-    px += (mx - px) * .12; py += (my - py) * .12;
-    prev.style.left = px + 'px'; prev.style.top = py + 'px';
+    if (finePointer) {
+      // cursore
+      cx += (mx - cx) * .16; cy += (my - cy) * .16;
+      cur.style.transform = `translate(${cx}px,${cy}px)`;
+      // anteprima menù
+      if (prev.classList.contains('show')) {
+        px += (mx - px) * .12; py += (my - py) * .12;
+        prev.style.transform = `translate(${px}px,${py}px)`;
+      } else { px = mx; py = my; }
+    }
 
     // titolo a peso variabile
     if (finePointer && !reduce && scrollY < innerHeight) chars.forEach((c, i) => {
@@ -1344,27 +1438,43 @@ footer.site{background:var(--char);padding:100px 0 90px;overflow:hidden}
       const d = Math.hypot(mx - x, my - (y - scrollY));
       const w = 300 + 520 * Math.max(0, 1 - d / 260);
       const cw = +c.dataset.w || 300, nw = cw + (w - cw) * .15;
-      c.dataset.w = nw; c.style.fontVariationSettings = `"wght" ${nw.toFixed(0)},"opsz" 144`;
+      if (Math.abs(nw - cw) < .5) return;
+      c.dataset.w = nw; c.style.fontVariationSettings = `"wght" ${nw.toFixed(0)}`;
     });
 
     // marquee: velocità + inclinazione
     const y = scrollY; vel = lerp(vel, y - lastY, .2); lastY = y;
-    if (!reduce) {
+    if (!reduce && vis.marquee) {
       mX -= 1 + Math.abs(vel) * .35;
-      const half = mTrack.scrollWidth / 2;
-      if (-mX >= half) mX += half;
+      if (-mX >= mHalf) mX += mHalf;
       skew = lerp(skew, clamp(vel * .5, -14, 14), .15);
       mTrack.style.transform = `translate3d(${mX}px,0,0) skewX(${-skew}deg)`;
     }
 
     // canvas solo se visibili
-    if (scrollY < hero.offsetHeight) drawHero(t);
-    drawDoughBall(t);
+    // i canvas lavorano solo quando sono sullo schermo
+    if (vis.hero) drawHero(t);
+    if (vis.dough) drawDoughBall(t);
     requestAnimationFrame(frame);
   }
 
-  addEventListener('resize', () => { sizeHero(); placePill(); onScroll(); });
-  sizeHero(); onScroll();
+  const vis = { hero: true, dough: false, marquee: false };
+  const vio = new IntersectionObserver(es => es.forEach(e => vis[e.target.dataset.vis] = e.isIntersecting));
+  hero.dataset.vis = 'hero'; dbc.dataset.vis = 'dough'; $('#marquee').dataset.vis = 'marquee';
+  [hero, dbc, $('#marquee')].forEach(el => vio.observe(el));
+
+  // mappa caricata solo su richiesta (evita ~1 MB di script Google all'avvio)
+  $('#mapLoad').addEventListener('click', e => {
+    const f = document.createElement('iframe');
+    f.title = 'Mappa Il Cortile In Centro'; f.referrerPolicy = 'no-referrer-when-downgrade';
+    f.src = 'https://maps.google.com/maps?q=Via%20Sigismondo%20Pandolfo%20Malatesta%2017%2C%20Rimini&z=17&output=embed';
+    e.currentTarget.replaceWith(f);
+  });
+
+  let rT;
+  addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { sizeHero(); measure(); placePill(); onScroll(); }, 120); });
+  sizeHero(); measure(); onScroll();
+  addEventListener('load', () => { measure(); onScroll(); });
   requestAnimationFrame(frame);
 })();
 
